@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dropdown Form</title>
+</head>
+<body>
+    <h1>Simple Web Form with Dropdown</h1>
+    <form action="/submit" method="post">
+        <label for="selected_option">Choose an option:</label>
+        <select name="selected_option" id="selected_option">
+            {% for option in options %}
+            <option value="{{ option }}">{{ option }}</option>
+            {% endfor %}
+        </select>
+        <br><br>
+        <input type="submit" value="Submit">
+    </form>
+</body>
+</html>

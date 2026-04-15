@@ -1,0 +1,31 @@
+from fastapi import FastAPI, Form, Request
+from fastapi.templating import Jinja2Templates
+from fastapi.responses import HTMLResponse
+from utils import xlsx_row_iterator
+
+app = FastAPI()
+templates = Jinja2Templates(directory="templates")
+
+# List of valid options for the dropdown
+valid_options = ["option1", "option2", "option3"]
+
+
+@app.get("/", response_class=HTMLResponse)
+async def get_form(request: Request):
+    path = "/home/mark/clients/price_lookup_AOT.xlsx"
+    rows = []
+    for row in xlsx_row_iterator(path):
+        if any(row):
+            rows.append(row)
+        else:
+            break
+    return templates.TemplateResponse("form.html", {"request": request,
+                                                    "options": valid_options})
+
+
+@app.post("/submit")
+async def submit_form(selected_option: str = Form(...)):
+    if selected_option in valid_options:
+        return {"message": f"You selected a valid option: {selected_option}"}
+    else:
+        return {"message": "Invalid option selected"}

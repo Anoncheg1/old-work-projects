@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dynamic Table with Dropdowns</title>
+    <style>
+        table {
+            border-collapse: collapse;
+            width: 100%;
+        }
+        th, td {
+            border: 1px solid black;
+            padding: 8px;
+            text-align: left;
+        }
+        th {
+            background-color: #f2f2f2;
+        }
+        form {
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- <nav> -->
+    <a href="/email_edit/{{ username }}">Email to send</a>
+    <!-- </nav> -->
+
+    <h1>Lookup table for {{ username }}</h1>
+
+    <table>
+        <colgroup>
+            <col style="width: 75%;">
+            <col style="width: 5%;">
+            <col style="width: 5%;">
+            <col style="width: 15%;">
+        </colgroup>
+        <!-- header -->
+        <thead>
+            <tr>
+                {% for head in headers %}
+                   <th>{{ head }}</th>
+                {% endfor %}
+                   <th>Actions</th>
+            </tr>
+        </thead>
+        <!-- table_data -->
+        <tbody>
+            {% for row in table_data %}
+            <tr>
+                <form action="/lookup_table/{{ username }}" method="post">
+                    <input type="hidden" name="field0" value="{{ row[0] }}">
+                    <input type="hidden" name="action" value="">
+                       <td>
+                           <input type="hidden" name="field1" value="{{ row[1] }}"  style="width: 80%;">
+                           {{ row[1] }}
+                       </td>
+                       <td><input type="text" name="field2" value="{{ row[2] }}"></td>
+                       <td><input type="text" name="field3" value="{{ row[3] }}"></td>
+                    <td>
+                        <button type="submit" onclick="this.form.action.value='save'">Save</button>
+                        <button type="submit" onclick="this.form.action.value='delete'">Delete</button>
+                    </td>
+                </form>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+    <form action="/lookup_table/{{ username }}" method="post">
+        <h2>Add New Row</h2>
+        <input type="hidden" name="field0" value="0">
+
+        <label for="field1">Ins. name:</label>
+        <select name="field1" id="field1" onchange="syncSelects(this, 'field12')">
+            {% for option in column11_options %}
+            <option value="{{ option }}">{{ option }}</option>
+            {% endfor %}
+        </select>
+
+        <label for="field12">Ins. symbol:</label>
+        <select name="field12" id="field12" onchange="syncSelects(this, 'field1')">
+            {% for option in column12_options %}
+            <option value="{{ option }}">{{ option }}</option>
+            {% endfor %}
+        </select>
+
+        <label for="field2">Balmo:</label>
+        <select name="field2" id="field2">
+            {% for option in column2_options %}
+            <option value="{{ option }}">{{ option }}</option>
+            {% endfor %}
+        </select>
+
+        <label for="field3">Outright:</label>
+        <select name="field3" id="field3">
+            {% for option in column2_options %}
+            <option value="{{ option }}">{{ option }}</option>
+            {% endfor %}
+        </select>
+
+        <label for="field4">Delta:</label>
+
+        <select name="field4" id="field4">
+            <option value="+">+</option>
+            <option value="-">-</option>
+        </select>
+
+        <input type="number" name="field5" id="field5" step="any">
+        <input type="hidden" name="action" value="add">
+
+        <!-- <input type="hidden" name="username" id="username" value="{{ username }}"> -->
+
+        <input type="submit" value="Add Row">
+    </form>
+
+
+    <script>
+        // Check if we should scroll to the bottom
+        {% if scroll_to_bottom %}
+            window.onload = function() {
+                window.scrollTo(0, document.body.scrollHeight);
+            }
+        {% endif %}
+
+        function syncSelects(changedSelect, targetSelectId) {
+            var targetSelect = document.getElementById(targetSelectId);
+            targetSelect.selectedIndex = changedSelect.selectedIndex;
+        }
+
+        // Initialize the selects to be in sync when the page loads
+        document.addEventListener('DOMContentLoaded', function() {
+            syncSelects(document.getElementById('field1'), 'field12');
+        });
+
+    </script>
+</body>
+</html>

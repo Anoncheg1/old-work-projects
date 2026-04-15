@@ -1,0 +1,4 @@
+python-lsp-server[all] # dev
+fastapi[standard]
+
+pytest=8.3.5

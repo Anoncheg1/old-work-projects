@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Emails</title>
+    <style>
+        table, th, td {
+            border: 1px solid black;
+            border-collapse: collapse;
+            padding: 5px;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- <nav> -->
+    <a href="{{ back_link }}">Back</a>
+
+    <!-- </nav> -->
+
+    <h1>Emails</h1>
+    <table>
+        <!-- table_data -->
+        <tbody>
+        {% for row in table_data %}
+        <tr>
+            <form action="/email_edit/{{ username }}" method="post">
+                <input type="hidden" name="field0" value="{{ row[0] }}">
+                <input type="hidden" name="action" value="">
+                <td><input type="text" name="field1" value="{{ row[1] }}"></td>
+                <td>
+                    <button type="submit" onclick="this.form.action.value='save'">Save</button>
+                    <button type="submit" onclick="this.form.action.value='delete'">Delete</button>
+                </td>
+            </form>
+        </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <!-- Add row -->
+    <form action="/email_edit/{{ username }}" method="post">
+        <h2>Add New Row</h2>
+        <input type="hidden" name="field0" value="0">
+        <input type="text" name="field1">
+        <input type="hidden" name="action" value="add">
+        <input type="submit" value="Add Row">
+    </form>
+</body>
+</html>

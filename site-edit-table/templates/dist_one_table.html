@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Edit Table</title>
+    <style>
+        table, th, td {
+            border: 1px solid black;
+            border-collapse: collapse;
+            padding: 5px;
+        }
+    </style>
+</head>
+<body>
+    <a href="/login">Back</a>
+    <h1>Distribution list</h1>
+    <table>
+
+        <!-- header -->
+        <thead>
+        <tr>
+            {% for head in headers %}
+                <th>{{ head }}</th>
+            {% endfor %}
+            <th>Actions</th>
+        </tr>
+        </thead>
+        <!-- table_data -->
+        <tbody>
+        {% for row in table_data %}
+        <tr>
+            <form action="/dist_one_table" method="post">
+                <input type="hidden" name="field0" value="{{ row[0] }}">
+                <input type="hidden" name="action" value="">
+                {% for head in headers %}
+                   <td><input type="text" name="field{{ loop.index }}" value="{{ row[loop.index] }}"></td>
+                {% endfor %}
+                <td>
+                    <button type="submit" onclick="this.form.action.value='save'">Save</button>
+                    <button type="submit" onclick="this.form.action.value='email'">Email</button>
+                    <button type="submit" onclick="this.form.action.value='delete'">Delete</button>
+                </td>
+            </form>
+        </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <!-- Add row -->
+    <form action="/dist_one_table" method="post">
+        <h2>Add New Row</h2>
+        <input type="hidden" name="field0" value="0">
+        {% for head in headers %}
+           <label for="field{{ loop.index }}">{{ head }}:</label>
+           <input type="text" name="field{{ loop.index }}" id="field{{ loop.index }}" step="any">
+        {% endfor %}
+        <input type="hidden" name="action" value="add">
+        <input type="submit" value="Add Row">
+    </form>
+</body>
+</html>
